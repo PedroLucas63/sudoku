@@ -1,0 +1,2 @@
+#define sudoku_VERSION_MAJOR @sudoku_VERSION_MAJOR@
+#define sudoku_VERSION_MINOR @sudoku_VERSION_MINOR@
