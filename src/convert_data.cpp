@@ -1,4 +1,4 @@
-#include "cli/Cli.hpp"
+#include "lib/cli/Cli.hpp"
 #include <string>
 #include <fstream>
 #include <vector>
@@ -9,7 +9,7 @@ short const size { 9 };
 
 struct Board {
    int id { 0 };
-   int board[size][size] { 0 };
+   int board[size][size] { };
 };
 
 bool checkLines(Board const& board_) {
@@ -86,15 +86,12 @@ std::vector<Board> getBoards(std::string in_file_) {
    while (true) { 
       Board b = getBoard(file);
       b.id = id;
-
       if (checkBoard(b)) {
          boards.push_back(b);
          ++id;
       } else {
          break;
       }
-
-      std::cout << id <<" \n";
     }
 
    return boards;
@@ -105,12 +102,14 @@ void processFile(int id_, int version_, std::string in_file_) {
 
    std::ofstream file {file_name, std::ios::binary};
 
-   file.write(reinterpret_cast<char*>(id_), sizeof(id_));
-   file.write(reinterpret_cast<char*>(version_), sizeof(version_));
-   file.write(reinterpret_cast<char*>(boards.size()), sizeof(boards.size()));
+   size_t quant { boards.size() };
+
+   file.write((char*)(&id_), sizeof(id_));
+   file.write((char*)(&version_), sizeof(version_));
+   file.write((char*)(&quant), sizeof(quant));
 
    for (Board b : boards) {
-      file.write(reinterpret_cast<char*>(&b), sizeof(b));
+      file.write((char*)(&b), sizeof(b));
    }
 
    file.close();
