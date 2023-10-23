@@ -15,7 +15,8 @@ include_directories(sudoku PUBLIC "${PROJECT_BINARY_DIR}"
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-add_executable(sudoku src/main.cpp)
+add_executable(sudoku src/main.cpp
+src/controller/GameController.cpp)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
