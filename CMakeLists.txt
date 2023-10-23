@@ -18,6 +18,8 @@ add_executable(sudoku src/main.cpp
 src/controller/GameController.cpp
 src/view/View.cpp)
 
+add_executable(convert src/convert_data.cpp)
+
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 include(CPack)
