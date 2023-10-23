@@ -6,6 +6,10 @@
 
 constexpr int const MINIMUM_CHECKS { 0 };
 constexpr int const DEFAULT_CHECKS { 3 };
+std::string const DATA_FOLDER { "./data" };
+std::string const DATA_EXTENSION { ".bak" };
+std::string const SAVE_FOLDER { "./save" };
+std::string const SAVE_EXTENSION { ".sav" };
 
 class GameController {
    private:
@@ -14,6 +18,7 @@ class GameController {
       Welcome,
       Helper,
       SearchDatas,
+      SelectData,
       ReadData,
       SearchSaves,
       ReadSaves,
@@ -24,10 +29,13 @@ class GameController {
    States m_state;
    bool m_help;
    int m_game_checks;
-   std::string m_input_data;
+   std::vector<std::string> m_input_datas;
+   int m_select_data;
 
    GameController(GameController const& other_) = delete;
    GameController& operator=(GameController const& other_) = delete;
+
+   void searchDatas();
 
    public:   
    GameController() = default;
