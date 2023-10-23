@@ -9,7 +9,9 @@ include_directories(sudoku PUBLIC "${PROJECT_BINARY_DIR}"
 "src/controller"
 "src/lib"
 "src/view"
-"src/model")
+"src/model"
+"src/classes"
+"src/functions")
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
