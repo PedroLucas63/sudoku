@@ -1,5 +1,5 @@
-#ifndef ACTION_GAME_HPP_
-#define ACTION_GAME_HPP_
+#ifndef ACTIONS_HPP_
+#define ACTIONS_HPP_
 
 enum Action {
    Insert,
@@ -13,4 +13,4 @@ struct ActionGame {
    Action m_action;
 };
 
-#endif /// ACTION_GAME_HPP_
+#endif /// ACTIONS_HPP_
