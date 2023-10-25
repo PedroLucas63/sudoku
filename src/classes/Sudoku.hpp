@@ -1,9 +1,11 @@
 #ifndef SUDOKU_HPP_
 #define SUDOKU_HPP_
 
-#include <vector>
 #include "Actions.hpp"
+#include "format/fstring.hpp"
+#include <array>
 #include <string>
+#include <vector>
 
 constexpr int const BOARD_SIZE{9};
 
@@ -18,15 +20,17 @@ struct Bank {
    std::vector<Board> m_boards;
 };
 
+void saveBankToFile(Bank const &bank_, std::string const &file_);
+Bank readBankFromFile(std::string const &file_);
+
 class Sudoku {
-private:
+ private:
    Board m_board;
    Board m_current_board;
    int m_checks;
    std::vector<ActionGame> m_actions;
 
-   Board replaceNegatives(Board const& board_);
-   void executeSaveActions(std::initializer_list<ActionGame> actions_);
+   Board replaceNegatives(Board const &board_);
    void executeSaveActions(std::vector<ActionGame> actions_);
 
    bool checkCurrentLinear();
@@ -34,25 +38,42 @@ private:
    bool checkCurrent();
 
    /// Verifique apenas com um valor: linha, coluna e bloco
+   bool checkUniqueValue(int x_, int y_);
 
-public:
-Sudoku(Board const& original_board_, int checks_, std::initializer_list<ActionGame> actions_ = {});
+   void drawWithColors(short correct_color_, short wrong_color_) const;
 
-int getBoardId() const;
-int getChecks() const;
-std::vector<ActionGame> getActions() const;
+ public:
+   Sudoku(Board const &original_board_, int checks_,
+          std::vector<ActionGame> actions_ = {});
 
-std::pair<bool, std::string> insert(int value_, int x_, int y_);
+   int getBoardId() const;
+   int getChecks() const;
+   std::vector<ActionGame> getActions() const;
+   std::array<int, BOARD_SIZE> getDigitsLeft() const;
 
-std::pair<bool, std::string> remove(int x_, int y_);
+   std::pair<bool, std::string> insert(int value_, int x_, int y_);
 
-/// Undo
-std::pair<bool, std::string> undo();
+   std::pair<bool, std::string> remove(int x_, int y_);
 
-/// Check
+   /// Undo
+   std::pair<bool, std::string> undo();
 
-/// Draw
-void draw() const;
+   /// Check
+   std::pair<bool, std::string> check();
+
+   /// Draw
+   void draw() const;
+
+   /// Draw
+   void drawCheck() const;
+
+   /// Draw
+   void drawOnlyWrong() const;
+
+   /// Check full
+   bool checkFull() const;
+   /// Check winner
+   bool checkWinner() const;
 };
 
 #endif /// SUDOKU_HPP_
