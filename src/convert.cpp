@@ -1,57 +1,12 @@
 #include "Sudoku.hpp"
+#include "Validate.hpp"
 #include "cli/Cli.hpp"
 #include <fstream>
 #include <iostream>
 #include <string>
 #include <vector>
 
-std::string const file_name{"data.bak"};
-
-bool checkLines(Board const &board_) {
-   for (int i{0}; i != BOARD_SIZE; ++i) {
-      int values[BOARD_SIZE]{0};
-      for (int j{0}; j != BOARD_SIZE; ++j) {
-         int abs{std::abs(board_.m_values[i][j])};
-         if (abs < 1 || abs > BOARD_SIZE) {
-            return false;
-         } else {
-            ++values[abs - 1];
-         }
-      }
-      for (int j{0}; j != BOARD_SIZE; ++j) {
-         if (values[j] != 1) {
-            return false;
-         }
-      }
-   }
-
-   return true;
-}
-
-bool checkColumns(Board const &board_) {
-   for (int i{0}; i != BOARD_SIZE; ++i) {
-      int values[BOARD_SIZE]{0};
-      for (int j{0}; j != BOARD_SIZE; ++j) {
-         int abs{std::abs(board_.m_values[j][i])};
-         if (abs < 1 || abs > BOARD_SIZE) {
-            return false;
-         } else {
-            ++values[abs - 1];
-         }
-      }
-      for (int j{0}; j != BOARD_SIZE; ++j) {
-         if (values[j] != 1) {
-            return false;
-         }
-      }
-   }
-
-   return true;
-}
-
-bool checkBoard(Board const &board_) {
-   return checkLines(board_) && checkColumns(board_);
-}
+std::string const file_name{"data.sdk"};
 
 Board getBoard(std::ifstream &file_) {
    int val;

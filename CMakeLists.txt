@@ -23,7 +23,8 @@ src/classes/Sudoku.cpp
 src/classes/Save.cpp)
 
 add_executable(convert src/convert.cpp
-src/classes/Sudoku.cpp)
+src/classes/Sudoku.cpp
+src/functions/Validate.cpp)
 
 add_executable(reading src/reading.cpp
 src/classes/Sudoku.cpp)
@@ -34,7 +35,8 @@ src/classes/Save.cpp)
 
 add_executable(loadfile src/loadfile.cpp
 src/classes/Sudoku.cpp
-src/classes/Save.cpp)
+src/classes/Save.cpp
+src/functions/Validate.cpp)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
