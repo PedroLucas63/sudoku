@@ -202,10 +202,6 @@ bool Sudoku::checkUniqueValue(int x_, int y_) const {
 }
 
 void Sudoku::drawWithColors(short correct_color_, short wrong_color_, short special_color_) const {
-   if (special_color_ == ext::cfg::none) {
-      special_color_ = correct_color_;
-   }
-
    ActionGame last_action;
    int last_x;
    int last_y;
@@ -288,7 +284,11 @@ void Sudoku::drawWithColors(short correct_color_, short wrong_color_, short spec
 
          if (current_value == 0) {
             std::cout << "  ";
-         } else if (!m_actions.empty() && last_action.m_action == Insert && last_x - 1 == number && last_y -1 == line  && !checkUniqueValue(last_x, last_y)) {
+         } else if (current_value == original_value) {
+            ext::fstring original_str {std::to_string(current_value)};
+            original_str.style(ext::stl::bold);
+            std::cout << original_str << " ";
+         } else if (!m_actions.empty() && !checkUniqueValue(number + 1, line + 1) && special_color_ != ext::cfg::none) {
             ext::fstring special_val{std::to_string(current_value)};
             special_val.color(special_color_);
             std::cout << special_val << " ";
@@ -296,10 +296,6 @@ void Sudoku::drawWithColors(short correct_color_, short wrong_color_, short spec
             ext::fstring correct_val{std::to_string(current_value)};
             correct_val.color(correct_color_);
             std::cout << correct_val << " ";
-         } else if (current_value == original_value) {
-            ext::fstring original_str {std::to_string(current_value)};
-            original_str.style(ext::stl::bold);
-            std::cout << original_str << " ";
          } else {
             ext::fstring incorrect_val{std::to_string(current_value)};
             incorrect_val.color(wrong_color_);
