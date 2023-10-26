@@ -89,7 +89,7 @@ void Sudoku::executeSaveActions(std::vector<ActionGame> actions_) {
    }
 }
 
-bool Sudoku::checkCurrentLinear() {
+bool Sudoku::checkCurrentLinear() const {
    for (int y{0}; y != BOARD_SIZE; ++y) {
       int values_lin[BOARD_SIZE + 1]{0};
       int values_col[BOARD_SIZE + 1]{0};
@@ -118,7 +118,7 @@ bool Sudoku::checkCurrentLinear() {
    return true;
 }
 
-bool Sudoku::checkCurrentBlocks() {
+bool Sudoku::checkCurrentBlocks() const {
    int sqrt{static_cast<int>(std::sqrt(BOARD_SIZE))};
    for (int y{0}; y != sqrt; ++y) {
       for (int x{0}; x != sqrt; ++x) {
@@ -158,11 +158,11 @@ bool Sudoku::checkCurrentBlocks() {
    return true;
 }
 
-bool Sudoku::checkCurrent() {
+bool Sudoku::checkCurrent() const {
    return checkCurrentLinear() && checkCurrentBlocks();
 }
 
-bool Sudoku::checkUniqueValue(int x_, int y_) {
+bool Sudoku::checkUniqueValue(int x_, int y_) const {
    int value{m_current_board.m_values[y_ - 1][x_ - 1]};
 
    /// Verifica o eixo x
@@ -201,7 +201,20 @@ bool Sudoku::checkUniqueValue(int x_, int y_) {
    return true;
 }
 
-void Sudoku::drawWithColors(short correct_color_, short wrong_color_) const {
+void Sudoku::drawWithColors(short correct_color_, short wrong_color_, short special_color_) const {
+   if (special_color_ == ext::cfg::none) {
+      special_color_ = correct_color_;
+   }
+
+   ActionGame last_action;
+   int last_x;
+   int last_y;
+   if (!m_actions.empty()) {
+      last_action = m_actions.back();
+      last_x = last_action.m_x;
+      last_y = last_action.m_y;
+   }
+
    /// Define algumas variaveis
    std::string board_table{"    +-------+-------+-------+"};
    size_t max_size_in_line{board_table.size()};
@@ -216,7 +229,8 @@ void Sudoku::drawWithColors(short correct_color_, short wrong_color_) const {
                              2 * (((x - 1) / sqrt_board) + (x - 1)) - 1};
 
       first_line[reference_location] = 'v';
-      first_line.color(ext::cfg::red);
+      first_line.color(ext::cfg::bright_yellow);
+      first_line.style(ext::stl::bold);
    }
 
    std::cout << first_line << "\n";
@@ -248,7 +262,8 @@ void Sudoku::drawWithColors(short correct_color_, short wrong_color_) const {
 
          if (y == line + 1) {
             ext::fstring reference{">"};
-            reference.color(ext::cfg::red);
+            reference.color(ext::cfg::bright_yellow);
+            reference.style(ext::stl::bold);
             std::cout << reference;
          } else {
             std::cout << " ";
@@ -273,12 +288,18 @@ void Sudoku::drawWithColors(short correct_color_, short wrong_color_) const {
 
          if (current_value == 0) {
             std::cout << "  ";
+         } else if (!m_actions.empty() && last_action.m_action == Insert && last_x - 1 == number && last_y -1 == line  && !checkUniqueValue(last_x, last_y)) {
+            ext::fstring special_val{std::to_string(current_value)};
+            special_val.color(special_color_);
+            std::cout << special_val << " ";
          } else if (current_value == -original_value) {
             ext::fstring correct_val{std::to_string(current_value)};
             correct_val.color(correct_color_);
             std::cout << correct_val << " ";
          } else if (current_value == original_value) {
-            std::cout << current_value << " ";
+            ext::fstring original_str {std::to_string(current_value)};
+            original_str.style(ext::stl::bold);
+            std::cout << original_str << " ";
          } else {
             ext::fstring incorrect_val{std::to_string(current_value)};
             incorrect_val.color(wrong_color_);
@@ -395,7 +416,7 @@ std::pair<bool, std::string> Sudoku::check() {
 }
 
 void Sudoku::draw() const {
-   drawWithColors(ext::cfg::bright_blue, ext::cfg::bright_blue);
+   drawWithColors(ext::cfg::bright_blue, ext::cfg::bright_blue, ext::cfg::bright_red);
 }
 
 void Sudoku::drawCheck() const {

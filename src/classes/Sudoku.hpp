@@ -33,14 +33,14 @@ class Sudoku {
    Board replaceNegatives(Board const &board_);
    void executeSaveActions(std::vector<ActionGame> actions_);
 
-   bool checkCurrentLinear();
-   bool checkCurrentBlocks();
-   bool checkCurrent();
+   bool checkCurrentLinear() const;
+   bool checkCurrentBlocks() const;
+   bool checkCurrent() const;
 
    /// Verifique apenas com um valor: linha, coluna e bloco
-   bool checkUniqueValue(int x_, int y_);
+   bool checkUniqueValue(int x_, int y_) const;
 
-   void drawWithColors(short correct_color_, short wrong_color_) const;
+   void drawWithColors(short correct_color_, short wrong_color_, short special_color_ = ext::cfg::none) const;
 
  public:
    Sudoku(Board const &original_board_, int checks_,
