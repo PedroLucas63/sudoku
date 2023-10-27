@@ -20,7 +20,8 @@ add_executable(sudoku src/main.cpp
 src/controller/GameController.cpp
 src/view/View.cpp
 src/classes/Sudoku.cpp
-src/classes/Save.cpp)
+src/classes/Save.cpp
+src/functions/Validate.cpp)
 
 add_executable(convert src/convert.cpp
 src/classes/Sudoku.cpp
