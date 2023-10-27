@@ -74,7 +74,6 @@ Board Sudoku::replaceNegatives(Board const &board_) {
    return temp_board;
 }
 
-/// TODO: Tentar usar template
 void Sudoku::executeSaveActions(std::vector<ActionGame> actions_) {
    for (auto act : actions_) {
       switch (act.m_action) {
@@ -315,6 +314,8 @@ int Sudoku::getBoardId() const { return m_board.m_id; }
 int Sudoku::getChecks() const { return m_checks; }
 
 std::vector<ActionGame> Sudoku::getActions() const { return m_actions; }
+
+size_t Sudoku::getActionsCount() const {return m_actions.size(); }
 
 std::array<int, BOARD_SIZE> Sudoku::getDigitsLeft() const {
    std::array<int, BOARD_SIZE> digits;

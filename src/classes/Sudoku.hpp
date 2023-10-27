@@ -43,12 +43,14 @@ class Sudoku {
    void drawWithColors(short correct_color_, short wrong_color_, short special_color_ = ext::cfg::none) const;
 
  public:
+   Sudoku() {}
    Sudoku(Board const &original_board_, int checks_,
           std::vector<ActionGame> actions_ = {});
 
    int getBoardId() const;
    int getChecks() const;
    std::vector<ActionGame> getActions() const;
+   size_t getActionsCount() const;
    std::array<int, BOARD_SIZE> getDigitsLeft() const;
 
    std::pair<bool, std::string> insert(int value_, int x_, int y_);
