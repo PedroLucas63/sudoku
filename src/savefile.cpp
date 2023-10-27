@@ -2,7 +2,7 @@
 #include "Sudoku.hpp"
 
 int main() {
-   Bank bank{readBankFromFile("./data/basic.bak")};
+   Bank bank{readBankFromFile("./data/basic.sdk")};
    Sudoku game{bank.m_boards[1], 3};
 
    game.insert(1, 1, 2);
