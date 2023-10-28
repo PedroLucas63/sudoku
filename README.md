@@ -1,58 +1,77 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/2zuGEajC)
-﻿
-# Projeto Sudoku Interativo
+# Sudoku Game :pencil:
 
-O GitHub Classroom (GHC) não oferece um mecanismo integrado para alterar **todos** os repositórios dentro de uma turma automaticamente. Por esse motivo vamos adotar a estratégia de armazenar o repositório com a descrição do projeto externamente.
+Welcome to the Sudoku game project! :video_game:
 
-Dessa forma é possível editar/atualizar a descrição desse projeto e código de suporte, se necessário, sem que seja necessário replicar manualmente essa alteração em cada repositório individual do GHC.
+[![Release](https://img.shields.io/badge/Download-Latest%20Release-brightgreen)](https://github.com/PedroLucas63/sudoku/releases)
 
-Nesse documento vamos chamar este repositório (derivado do GHC) de repositório **Implementação Sudoku**. Já a descrição do projeto e código de suporte está localizada em um _repositório externo_ chamado de [**Descrição Sudoku**](https://codeberg.org/selan/projeto-sudoku).
+## Table of Contents
+- [Description](#description) :page_facing_up:
+- [Features](#features) :sparkles:
+- [Usage Manual](#usage-manual) :book:
+- [Compilation Manual](#compilation-manual) :hammer_and_wrench:
+- [License](#license) :scroll:
+- [Contributions](#contributions) :handshake:
+- [Contact](#contact) :email:
 
+## Description :page_facing_up:
+Sudoku is a classic number puzzle game. This C++ Sudoku game allows you to play Sudoku in the command line. You can choose from various game options and even load puzzles from files. Challenge yourself and test your Sudoku-solving skills!
 
-A vantagem desse novo esquema organizacional, separando a descrição do projeto da implementação, é que se for necessário atualizar algo na descrição eu o farei _uma vez_ no repositório **Descrição Sudoku** e vocês simplesmente baixam a nova atualização com comandos simples como `git pull`. Para continuarmos a nos beneficiar do sistema de acompanhamento de código e troca de mensagens via _pull request_ com o _branch_ `feedback` ou via a criação de _issues_, você continuará a trabalhar no repositório **Implementação Sudoku** que é monitorado pelo GHC. Portanto o procedimento (de integração) a ser seguido é o seguinte:
+## Features :sparkles:
+- Play Sudoku with multiple game options.
+- Load Sudoku puzzles from files.
+- Check your progress with the provided checks.
+- Undo moves if you make a mistake.
+- User-friendly interface for a seamless gaming experience.
 
-1. Clone o repositório **Descrição Sudoku** na sua máquina.
-2. Clone o repositório **Implementação Sudoku** (este repo) na sua máquina.
-3. Copie o código de suporte (pastas `source` e `data`)  do repo local **Descrição Sudoku** para a raiz do repo local **Implementação Sudoku**.
-3. Quando finalizar (ou se quiser tirar uma dúvida) _"comite"_ e atualize o repositório local **Implementação Sudoku**.
+![Main menu](./imgs/main_menu.png)
 
-Pronto, agora você pode fazer _pull request_ em `feedback` ou abrir alguma _issue_, casa queira tirar dúvidas sobre o projeto.
+## Usage Manual :book:
+1. To start the game, run the following command:
+   ```shell
+   sudoku [options]
+   ```
 
-Ao final desse processo, a implementação completa do projeto terão sido "_comitadas_" para o repo **Implementação Sudoku** no GHC. Esse é o repo com seu trabalho que será baixado para avaliação.
+   Available options:
+   - `-c` or `--checks`: Set the number of checks allowed (default is 3).
+   - `-h` or `--help`: Display the game's help information.
+   - `<file>`: Load a Sudoku puzzle from a file.
 
-## Compilando o Código de Suporte
+2. If no file is provided, the game will list available puzzles in the `./data` folder. Select a puzzle to open.
 
-Primeiramente, certifique-se de ter copiado o código de suporte (`data` e `source`) do repo local **Descrição Sudoku** para a raiz do repo local **Implementação Sudoku**. Feito isso, para compilar e executar, é só seguir as instruções abaixo.
+3. After opening a puzzle, a menu with various options will be displayed:
+   - Play: Start the game.
+   - New Game: Move to the next available puzzle in the bank.
+   - Load/Save: Load the game if no moves were made, or save the game if any moves were made.
+   - About: View game information.
+   - Quit: Exit the game.
 
-## Usando `cmake`
+4. When starting a new game, you'll have options like Place, Remove, Check, Undo, and Return:
+   - Place: Add a value to a specific cell.
+   - Remove: Delete a value from a cell.
+   - Check: Verify the correctness of your entries.
+   - Undo: Revert your last move.
+   - Return: Go back to the main menu without losing your progress.
 
-A partir da pasta principal do repo local **Implementação Sudoku** faça:
+![Play menu](./imgs/play_menu.png)
 
-```
-cmake -S source -B build
-cmake --build build
-```
+## Compilation Manual :hammer_and_wrench:
+To compile the project, follow these steps:
 
-## Usando compilação manual com g++
+1. Create a build directory:
+   ```shell
+   cmake -S . -B build
+   ```
 
-É possível compilar o programa "na mão" (i.e. sem o `cmake`) usando o `g++`. Para isso use o comando abaixo a partir da pasta principal do repo local **Implementação Sudoku**:
+2. Build the project:
+   ```shell
+   cmake --build build
+   ```
 
-```
-mkdir -p build
-g++ -Wall -std=c++11 -pedantic source/core/*.cpp source/libs/coms.cpp -I source/core -I source/libs -o build/sudoku
-```
+## License :scroll:
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
-## Executando
+## Contributions :handshake:
+Contributions are welcome! If you'd like to contribute to the project, please open an issue or a pull request.
 
-Independente do procedimento utilizado para compilar, será gerado um executável com o nome `sudoku` dentro da pasta `build`. No __windows__ esse executável fica na pasta `Debug`.
-
-Logo após a compilação, para executar o programa gerado use os comandos:
-
-No linux:
-```
-./build/sudoku data/cities.txt
-```
-No windows:
-```
-.\Debug\sudoku.exe data/cities.txt
-```
+## Contact :email:
+If you have any questions or need assistance, feel free to reach out to us at [pedrolucas.jsrn@gmail.com].

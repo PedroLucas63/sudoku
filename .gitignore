@@ -36,6 +36,7 @@ build
 bin
 
 # Docs
+.vscode/
 docs/html
 docs/latex
 
