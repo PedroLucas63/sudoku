@@ -4,17 +4,17 @@
  * @brief Sudoku is a classic number puzzle game.
  * @version 1.0
  * @date 2023-10-28
- * 
+ *
  * @copyright Copyright (c) 2023
- * 
+ *
  */
 #include "GameController.hpp"
 
 /**
  * @brief The main function of the Sudoku game.
  *
- * This function initializes the game, runs the game loop, and cleans up resources
- * when the game is finished.
+ * This function initializes the game, runs the game loop, and cleans up
+ * resources when the game is finished.
  *
  * @param argc Number of command-line arguments.
  * @param argv An array of command-line arguments.

@@ -4,9 +4,9 @@
  * @brief Convert a ".txt" data to ".sdk" bank.
  * @version 1.0
  * @date 2023-10-28
- * 
+ *
  * @copyright Copyright (c) 2023
- * 
+ *
  * @details
  * This file format is a binary format that contains the following data:
  * - id (int): The identifier of the Sudoku bank.
@@ -15,10 +15,10 @@
  * - Boards: Each board is represented as a struct with the following format:
  *     struct Board {
  *       int m_id;                              // The ID of the board.
- *       int m_values[BOARD_SIZE][BOARD_SIZE];  // The Sudoku board itself, a 9x9 grid of integers.
+ *       int m_values[BOARD_SIZE][BOARD_SIZE];  // The Sudoku board itself, a
+ * 9x9 grid of integers.
  *     };
  */
-
 
 #include "Sudoku.hpp"
 #include "Validate.hpp"
@@ -29,11 +29,13 @@
 #include <vector>
 
 /**
- * @file main.cpp
+ * @brief The filename for saving and loading Sudoku bank data.
  *
- * @brief This file contains the main function and related utility functions for the Sudoku game.
+ * This constant string represents the filename used for saving and loading
+ * Sudoku bank data in the
+ * ".sdk" file format. It is a default filename used by the program for managing
+ * Sudoku data.
  */
-
 std::string const FILENAME{"data.sdk"};
 
 /**
@@ -57,9 +59,11 @@ Board getBoard(std::ifstream &input_file_);
 std::vector<Board> getBoards(std::string input_file_);
 
 /**
- * @brief Processes an input file, converts it to a Sudoku bank, and saves it to a file.
+ * @brief Processes an input file, converts it to a Sudoku bank, and saves it to
+ * a file.
  *
- * This function processes an input file, converts it to a Sudoku bank, and saves it to a specified file.
+ * This function processes an input file, converts it to a Sudoku bank, and
+ * saves it to a specified file.
  *
  * @param id_ The bank's identifier.
  * @param version_ The bank's version.
@@ -74,10 +78,10 @@ void processFile(int id_, int version_, std::string input_file_);
  * and converts it into a Sudoku bank file.
  *
  * @param argc Number of command-line arguments.
- * @param argv_ An array of command-line arguments.
+ * @param argv An array of command-line arguments.
  * @return An integer representing the exit status of the program.
  */
-int main(int argc, char *argv_) {
+int main(int argc, char *argv[]) {
    // Create a command-line argument parser
    ext::CLI cli;
    cli.addArgumentInteger('i', "id");
@@ -147,7 +151,8 @@ std::vector<Board> getBoards(std::string input_file_) {
    return boards;
 }
 
-/// @brief Processes an input file, converts it to a Sudoku bank, and saves it to a file.
+/// @brief Processes an input file, converts it to a Sudoku bank, and saves it
+/// to a file.
 void processFile(int id_, int version_, std::string input_file_) {
    std::cout << " >>> Converting file...\n";
 
