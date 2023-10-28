@@ -37,12 +37,12 @@ void renderHelper(int default_checks_) {
    std::cout << "    -h       Print this help text.\n";
 }
 
-void renderSelectData(std::vector<std::string> const& datas_) {
+void renderSelectData(std::vector<std::string> const &datas_) {
    std::cout << "\n";
    renderTitle();
    std::cout << "\n";
 
-   ext::fstring info {"Select one of the options below."};
+   ext::fstring info{"Select one of the options below."};
    info.color(ext::cfg::green);
    info.style(ext::stl::italic);
 
@@ -52,7 +52,7 @@ void renderSelectData(std::vector<std::string> const& datas_) {
       std::cout << index << ". " << datas_[index] << "\n";
    }
 
-   ext::fstring select {"Enter one of the listed game banks >> "};
+   ext::fstring select{"Enter one of the listed game banks >> "};
    select.color(ext::cfg::blue);
    select.style(ext::stl::italic);
 
@@ -71,7 +71,8 @@ void renderEnding(std::string warning_) {
    std::cout << message << "\n";
 }
 
-void renderMenu(const std::function<void()> &draw_function_, bool save_, std::string warning_) {
+void renderMenu(const std::function<void()> &draw_function_, bool save_,
+                std::string warning_) {
    std::cout << "\n";
    renderTitle();
    std::cout << "\n";
@@ -102,9 +103,131 @@ void renderMenu(const std::function<void()> &draw_function_, bool save_, std::st
    std::cout << request;
 }
 
+void renderPlay(const std::function<void()> &draw_function_, int checks_left_,
+                std::array<int, BOARD_SIZE> digits_left_,
+                std::string message_) {
+   std::cout << "\n";
+   renderTitle();
+   std::cout << "\n";
+
+   draw_function_();
+
+   ext::fstring checks{"Checks left: [ " + std::to_string(checks_left_) + " ]"};
+   checks.color(ext::cfg::yellow);
+   checks.style(ext::stl::italic);
+
+   std::cout << checks << "\n";
+
+   ext::fstring digits{"Digits left: [ "};
+
+   for (int index{0}; index != BOARD_SIZE; ++index) {
+      if (digits_left_[index] <= 0) {
+         digits += "  ";
+      } else {
+         digits += std::to_string(index + 1) + " ";
+      }
+   }
+
+   digits += "]";
+   digits.color(ext::cfg::yellow);
+   digits.style(ext::stl::italic);
+
+   std::cout << digits << "\n";
+
+   ext::fstring message_left{"MSG: ["};
+   message_left.color(ext::cfg::yellow);
+   message_left.style(ext::stl::italic);
+
+   ext::fstring message{message_};
+   message.background(ext::cbg::yellow);
+   message.style(ext::stl::italic);
+
+   ext::fstring message_right{"]"};
+   message_right.color(ext::cfg::yellow);
+   message_right.style(ext::stl::italic);
+
+   std::cout << message_left << message << message_right << "\n\n";
+
+   ext::fstring commands{
+       "Commands syntax:\n"
+       "  'enter' (without typing anything)  -> go back to previous menu.n\n"
+       "  'p' <row> <col> <number> + 'enter' -> place <number> on board at "
+       "location (<row>, <col>).\n"
+       "  'r' <row> <col> + 'enter'          -> remove number on board at "
+       "location (<row>, <col>).\n"
+       "  'c' 'enter'                        -> check which moves made are "
+       "correct.\n"
+       "  'u' + 'enter'                      -> undo last play.\n"
+       "  <col> and <number> must be in the range [1,9].\n"
+       "  <row> must be in the range [A,I].\n"};
+
+   commands.color(ext::cfg::green);
+   commands.style(ext::stl::bold);
+
+   std::cout << commands << "\n";
+
+   ext::fstring enter_command{"Enter the action >> "};
+   enter_command.color(ext::cfg::blue);
+   enter_command.style(ext::stl::italic);
+
+   std::cout << enter_command;
+}
+
+void renderWinner(const std::function<void()> &draw_function_, int checks_left_,
+                  std::array<int, BOARD_SIZE> digits_left_, bool winner_) {
+   std::cout << "\n";
+   renderTitle();
+   std::cout << "\n";
+
+   draw_function_();
+
+   ext::fstring checks{"Checks left: [ " + std::to_string(checks_left_) + " ]"};
+   checks.color(ext::cfg::yellow);
+   checks.style(ext::stl::italic);
+
+   std::cout << checks << "\n";
+
+   ext::fstring digits{"Digits left: [ "};
+
+   for (int index{0}; index != BOARD_SIZE; ++index) {
+      if (digits_left_[index] <= 0) {
+         digits += "  ";
+      } else {
+         digits += std::to_string(index + 1) + " ";
+      }
+   }
+
+   digits += "]";
+   digits.color(ext::cfg::yellow);
+   digits.style(ext::stl::italic);
+
+   std::cout << digits << "\n";
+
+   ext::fstring message_left{"MSG: ["};
+   message_left.color(ext::cfg::yellow);
+   message_left.style(ext::stl::italic);
+
+   ext::fstring message;
+
+   if (winner_) {
+      message = "Congratulations, you solved the puzzle! Press enter to continue.";
+   } else {
+      message = "Sorry, you lost! Press enter to continue.";
+   }
+
+   message.background(ext::cbg::yellow);
+   message.style(ext::stl::italic);
+
+   ext::fstring message_right{"]"};
+   message_right.color(ext::cfg::yellow);
+   message_right.style(ext::stl::italic);
+
+   std::cout << message_left << message << message_right << "\n\n";
+}
+
 void renderNewGame(bool save_) {
-      ext::fstring ask{
-       "You have a game in progress. Are you sure you want to load a new game [y/N]? "};
+   ext::fstring ask{"You have a game in progress. Are you sure you want to "
+                    "load a new game [y/N]? "};
    ask.color(ext::cfg::blue);
    ask.style(ext::stl::italic);
 
@@ -113,12 +236,12 @@ void renderNewGame(bool save_) {
    }
 }
 
-void renderLoadSave(std::vector<std::pair<std::string, Save>> const& saves_) {
+void renderLoadSave(std::vector<std::pair<std::string, Save>> const &saves_) {
    std::cout << "\n";
    renderTitle();
    std::cout << "\n";
 
-   ext::fstring info {"Select one of the options below or enter your own save."};
+   ext::fstring info{"Select one of the options below or enter your own save."};
    info.color(ext::cfg::green);
    info.style(ext::stl::italic);
 
@@ -130,26 +253,27 @@ void renderLoadSave(std::vector<std::pair<std::string, Save>> const& saves_) {
 
    std::cout << saves_.size() << ". Inform yourself\n";
 
-   ext::fstring select {"Enter one of the listed game saves >> "};
+   ext::fstring select{"Enter one of the listed game saves >> "};
    select.color(ext::cfg::blue);
    select.style(ext::stl::italic);
-   
+
    std::cout << "\n" << select;
 }
 
 void renderRequestSave() {
-   ext::fstring select {"Enter the save file >> "};
+   ext::fstring select{"Enter the save file >> "};
    select.color(ext::cfg::blue);
    select.style(ext::stl::italic);
-   
+
    std::cout << "\n" << select;
 }
 
 void renderOverwriteConfirm() {
-   ext::fstring select {"This file already exists, are you sure you want to overwrite it [y/N]? "};
+   ext::fstring select{"This file already exists, are you sure you want to "
+                       "overwrite it [y/N]? "};
    select.color(ext::cfg::blue);
    select.style(ext::stl::italic);
-   
+
    std::cout << "\n" << select;
 }
 
@@ -177,7 +301,7 @@ void renderAbout() {
 
    for (ext::fstring line : lines) {
       do {
-         ext::fstring buffer { line.split_at(WIDTH, ' ') };
+         ext::fstring buffer{line.split_at(WIDTH, ' ')};
 
          line.color(ext::cfg::green);
          line.style(ext::stl::italic);
@@ -190,7 +314,7 @@ void renderAbout() {
 
    std::cout << bars << "\n";
 
-   ext::fstring end {"Press <enter> to go back."};
+   ext::fstring end{"Press <enter> to go back."};
    end.color(ext::cfg::blue);
    end.style(ext::stl::italic);
 

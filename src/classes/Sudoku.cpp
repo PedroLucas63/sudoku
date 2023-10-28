@@ -201,15 +201,6 @@ bool Sudoku::checkUniqueValue(int x_, int y_) const {
 }
 
 void Sudoku::drawWithColors(short correct_color_, short wrong_color_, short special_color_) const {
-   ActionGame last_action;
-   int last_x;
-   int last_y;
-   if (!m_actions.empty()) {
-      last_action = m_actions.back();
-      last_x = last_action.m_x;
-      last_y = last_action.m_y;
-   }
-
    /// Define algumas variaveis
    std::string board_table{"    +-------+-------+-------+"};
    size_t max_size_in_line{board_table.size()};
@@ -321,8 +312,8 @@ std::array<int, BOARD_SIZE> Sudoku::getDigitsLeft() const {
    std::array<int, BOARD_SIZE> digits;
    digits.fill(BOARD_SIZE);
 
-   for (int y{0}; y <= BOARD_SIZE; ++y) {
-      for (int x{0}; x <= BOARD_SIZE; ++x) {
+   for (int y{0}; y != BOARD_SIZE; ++y) {
+      for (int x{0}; x != BOARD_SIZE; ++x) {
          int value{m_current_board.m_values[y][x]};
          if (value != 0) {
             --digits[value - 1];
@@ -426,8 +417,8 @@ void Sudoku::drawOnlyWrong() const {
 
 /// Check full
 bool Sudoku::checkFull() const {
-   for (int y{0}; y <= BOARD_SIZE; ++y) {
-      for (int x{0}; x <= BOARD_SIZE; ++x) {
+   for (int y{0}; y != BOARD_SIZE; ++y) {
+      for (int x{0}; x != BOARD_SIZE; ++x) {
          int value{m_current_board.m_values[y][x]};
          if (value == 0) {
             return false;
@@ -439,8 +430,8 @@ bool Sudoku::checkFull() const {
 }
 /// Check winner
 bool Sudoku::checkWinner() const {
-   for (int y{0}; y <= BOARD_SIZE; ++y) {
-      for (int x{0}; x <= BOARD_SIZE; ++x) {
+   for (int y{0}; y != BOARD_SIZE; ++y) {
+      for (int x{0}; x != BOARD_SIZE; ++x) {
          int value{m_current_board.m_values[y][x]};
          int correct_value{std::abs(m_board.m_values[y][x])};
 

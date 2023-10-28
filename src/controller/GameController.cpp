@@ -26,7 +26,7 @@ void GameController::destruct() {
 
 void GameController::initialize(int argc_, char *argv_[]) {
    ext::CLI cli;
-   cli.addArgumentInteger('c', "checks");
+   cli.addArgumentInteger('c', "checks", DEFAULT_CHECKS);
    cli.addArgument('h', "help");
 
    cli.parse(argc_, argv_);
@@ -34,8 +34,6 @@ void GameController::initialize(int argc_, char *argv_[]) {
    m_help = cli.receiveSimple("-h");
 
    int checks{cli.receiveInteger("-c")};
-   /// TODO: Verificar se foi definido (Mudança no CLI para tupla <Reference*,
-   /// bool, type>)
    m_game_checks = checks >= MINIMUM_CHECKS ? checks : DEFAULT_CHECKS;
 
    std::vector<std::string> buffers{cli.receiveBuffer()};
@@ -45,6 +43,8 @@ void GameController::initialize(int argc_, char *argv_[]) {
          m_input_datas.push_back(buffers.front());
       }
    }
+
+   m_state = Start;
 }
 
 void GameController::process() {
@@ -69,6 +69,12 @@ void GameController::process() {
       break;
    case Menu:
       getOptionMenu();
+      break;
+   case Playing:
+      getOptionPlay();
+      break;
+   case CheckWinner:
+      pressEnter();
       break;
    case NewGame:
       newGame();
@@ -128,6 +134,12 @@ void GameController::update() {
    case Menu:
       selectNextMenuState();
       break;
+   case Playing:
+      selectNextPlayingState();
+      break;
+   case CheckWinner:
+      m_state = Menu;
+      break;
    case NewGame:
       m_state = Menu;
       break;
@@ -165,6 +177,23 @@ void GameController::render() {
    case Menu:
       renderMenu([&]() { m_current_game.draw(); },
                  m_current_game.getActionsCount(), m_menu_warning);
+      break;
+   case Playing:
+      renderPlay(
+          [&]() {
+             if (m_print_check) {
+                m_current_game.drawCheck();
+             } else {
+                m_current_game.draw();
+             }
+          },
+          m_current_game.getChecks(), m_current_game.getDigitsLeft(),
+          m_play_message);
+      break;
+   case CheckWinner:
+      renderWinner([&]() { m_current_game.drawOnlyWrong(); },
+                   m_current_game.getChecks(), m_current_game.getDigitsLeft(),
+                   m_current_game.checkWinner());
       break;
    case NewGame:
       renderNewGame(m_current_game.getActionsCount());
@@ -251,7 +280,7 @@ void GameController::searchSaves() {
 
    for (size_t index{0}; index != files.getFilesSize(); ++index) {
       ext::FileHandler file{files.atFiles(index)};
-      
+
       if (file.extension().generic_string() == SAVE_EXTENSION) {
          m_input_saves.push_back(file.generic_string());
       }
@@ -288,6 +317,7 @@ void GameController::getOptionMenu() {
 
       switch (value) {
       case 1:
+         m_return_menu = false;
          m_menu_option = MenuPlay;
          break;
       case 2:
@@ -315,6 +345,80 @@ void GameController::getOptionMenu() {
    }
 }
 
+void GameController::getOptionPlay() {
+   if (m_current_game.checkFull()) {
+      return;
+   }
+
+   m_print_check = false;
+   ext::fstring full_command;
+   std::getline(std::cin, full_command);
+
+   full_command.trim();
+
+   if (full_command.empty()) {
+      m_return_menu = true;
+   } else {
+      std::vector<std::string> commands;
+      full_command.split(commands, ' ');
+
+      std::string command{commands.front()};
+
+      if (command == "p") {
+         if (commands.size() >= 4) {
+            std::string row{commands[1]};
+            std::string col{commands[2]};
+            std::string number{commands[3]};
+
+            int row_int{std::toupper(row.front()) - 'A' + 1};
+
+            try {
+               int col_int{std::stoi(col)};
+               int number_int{std::stoi(number)};
+
+               std::pair<bool, std::string> res{
+                   m_current_game.insert(number_int, col_int, row_int)};
+               m_play_message = res.second;
+            } catch (...) {
+               m_play_message =
+                   "One of the entries is not in the requested format.";
+            }
+         } else {
+            m_play_message = "Insufficient number of entries.";
+         }
+      } else if (command == "r") {
+         if (commands.size() >= 3) {
+            std::string row{commands[1]};
+            std::string col{commands[2]};
+
+            int row_int{std::toupper(row.front()) - 'A' + 1};
+
+            try {
+               int col_int{std::stoi(col)};
+
+               std::pair<bool, std::string> res{
+                   m_current_game.remove(col_int, row_int)};
+               m_play_message = res.second;
+            } catch (...) {
+               m_play_message =
+                   "One of the entries is not in the requested format.";
+            }
+         } else {
+            m_play_message = "Insufficient number of entries.";
+         }
+      } else if (command == "c") {
+         std::pair<bool, std::string> res{m_current_game.check()};
+         m_print_check = res.first;
+         m_play_message = res.second;
+      } else if (command == "u") {
+         std::pair<bool, std::string> res{m_current_game.undo()};
+         m_play_message = res.second;
+      } else {
+         m_play_message = "No functions recognized.";
+      }
+   }
+}
+
 void GameController::newGame() {
    if (m_current_game.getActionsCount()) {
       std::string buffer;
@@ -330,6 +434,7 @@ void GameController::newGame() {
             m_current_game =
                 Sudoku{m_bank.m_boards[m_select_game], m_game_checks};
             m_new_game = true;
+            m_play_message.clear();
          } else {
             m_new_game = false;
          }
@@ -338,6 +443,7 @@ void GameController::newGame() {
       m_select_game = (m_select_game + 1) % m_bank.m_boards.size();
       m_current_game = Sudoku{m_bank.m_boards[m_select_game], m_game_checks};
       m_new_game = true;
+      m_play_message.clear();
    }
 }
 
@@ -347,6 +453,7 @@ void GameController::saveGame() {
 
    if (buffer.empty()) {
       m_saving = true;
+      return;
    }
 
    std::string save_name{SAVE_FOLDER + '/' + buffer + SAVE_EXTENSION};
@@ -364,7 +471,7 @@ void GameController::saveGame() {
       save.m_checks = m_current_game.getChecks();
       save.m_actions = m_current_game.getActions();
 
-      saveGameToFile(save, save_file);
+      saveGameToFile(save, save_file.generic_string());
       m_saving = true;
    }
 }
@@ -506,6 +613,7 @@ void GameController::selectNextSearchSavesState() {
 void GameController::selectNextMenuState() {
    switch (m_menu_option) {
    case MenuPlay:
+      m_state = Playing;
       break;
    case MenuNewGame:
       m_state = NewGame;
@@ -527,11 +635,19 @@ void GameController::selectNextMenuState() {
    }
 }
 
+void GameController::selectNextPlayingState() {
+   if (m_current_game.checkFull()) {
+      m_state = CheckWinner;
+   } else if (m_return_menu) {
+      m_state = Menu;
+   }
+}
+
 void GameController::selectNextLoadSaveState() {
    if (m_select_save == m_saves.size()) {
       m_state = ReadUserSave;
    } else if (m_select_save != -1) {
-      m_state = Menu; /// TODO: PLAYING
+      m_state = Menu;
    } else {
       m_menu_warning = "The selected save does not exist or is corrupt.";
       m_state = Menu;
@@ -540,7 +656,7 @@ void GameController::selectNextLoadSaveState() {
 
 void GameController::selectNextReadSaveState() {
    if (m_select_save != -1) {
-      m_state = Menu; /// TODO: PLAYING
+      m_state = Menu;
    } else {
       m_menu_warning = "The selected save does not exist or is corrupt.";
       m_state = Menu;

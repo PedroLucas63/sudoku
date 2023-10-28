@@ -27,6 +27,8 @@ class GameController {
       ReadSaves,
       LoadGame,
       Menu,
+      Playing,
+      CheckWinner,
       NewGame,
       SaveGame,
       OverwriteSave,
@@ -70,6 +72,10 @@ class GameController {
    Sudoku m_current_game;
    std::vector<std::pair<std::string, Save>> m_saves;
 
+   std::string m_play_message;
+   bool m_print_check;
+   bool m_return_menu;
+
    GameController(GameController const& other_) = delete;
    GameController& operator=(GameController const& other_) = delete;
 
@@ -80,6 +86,7 @@ class GameController {
    void readSaves();
    void loadGame();
    void getOptionMenu();
+   void getOptionPlay();
    void newGame();
    void saveGame();
    void confirmOverwrite();
@@ -94,6 +101,7 @@ class GameController {
    void selectNextReadDataState();
    void selectNextSearchSavesState();
    void selectNextMenuState();
+   void selectNextPlayingState();
    void selectNextLoadSaveState();
    void selectNextReadSaveState();
    void selectNextSaveGameState();

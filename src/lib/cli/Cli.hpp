@@ -225,9 +225,9 @@ class CLI {
     * @param ref_ The short reference character for the argument.
     * @param c_ref_ The long reference string for the argument (optional).
     */
-   void addArgument(char ref_, std::string c_ref_ = std::string()) {
+   void addArgument(char ref_, std::string c_ref_ = std::string(), bool default_ = false) {
       m_arguments.push_back(std::make_unique<Argument>(ref_, c_ref_));
-      m_values_simple[m_arguments.back().get()] = false;
+      m_values_simple[m_arguments.back().get()] = default_;
    }
 
    /**
@@ -235,9 +235,9 @@ class CLI {
     * @param ref_ The short reference character for the argument.
     * @param c_ref_ The long reference string for the argument (optional).
     */
-   void addArgumentText(char ref_, std::string c_ref_ = std::string()) {
+   void addArgumentText(char ref_, std::string c_ref_ = std::string(), std::string default_ = std::string()) {
       m_arguments.push_back(std::make_unique<ArgumentText>(ref_, c_ref_));
-      m_values_text[m_arguments.back().get()] = std::string();
+      m_values_text[m_arguments.back().get()] = default_;
    }
 
    /**
@@ -245,9 +245,9 @@ class CLI {
     * @param ref_ The short reference character for the argument.
     * @param c_ref_ The long reference string for the argument (optional).
     */
-   void addArgumentInteger(char ref_, std::string c_ref_ = std::string()) {
+   void addArgumentInteger(char ref_, std::string c_ref_ = std::string(), int default_ = int()) {
       m_arguments.push_back(std::make_unique<ArgumentInteger>(ref_, c_ref_));
-      m_values_int[m_arguments.back().get()] = int();
+      m_values_int[m_arguments.back().get()] = default_;
    }
 
    /**
@@ -255,9 +255,9 @@ class CLI {
     * @param ref_ The short reference character for the argument.
     * @param c_ref_ The long reference string for the argument (optional).
     */
-   void addArgumentFloating(char ref_, std::string c_ref_ = std::string()) {
+   void addArgumentFloating(char ref_, std::string c_ref_ = std::string(), float default_ = float()) {
       m_arguments.push_back(std::make_unique<ArgumentFloating>(ref_, c_ref_));
-      m_values_float[m_arguments.back().get()] = float();
+      m_values_float[m_arguments.back().get()] = default_;
    }
 
    /**
@@ -269,11 +269,11 @@ class CLI {
     */
    void addArgumentInFile(
        char ref_, std::string c_ref_ = std::string(),
-       std::initializer_list<std::string> const &extensions_ = {}) {
+       std::initializer_list<std::string> const &extensions_ = {}, std::string default_ = std::string()) {
       m_arguments.push_back(
           std::make_unique<ArgumentInFile>(ref_, c_ref_, extensions_));
       m_values_infile[static_cast<ArgumentInFile *>(m_arguments.back().get())] =
-          std::string();
+          default_;
    }
 
    /**
@@ -285,11 +285,11 @@ class CLI {
     */
    void addArgumentOutFile(
        char ref_, std::string c_ref_ = std::string(),
-       std::initializer_list<std::string> const &extensions_ = {}) {
+       std::initializer_list<std::string> const &extensions_ = {}, std::string default_ = std::string()) {
       m_arguments.push_back(
           std::make_unique<ArgumentOutFile>(ref_, c_ref_, extensions_));
       m_values_outfile[static_cast<ArgumentOutFile *>(
-          m_arguments.back().get())] = std::string();
+          m_arguments.back().get())] = default_;
    }
 
    /**
