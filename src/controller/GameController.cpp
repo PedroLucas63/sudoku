@@ -1,3 +1,15 @@
+/**
+ * @file GameController.cpp
+ * @author Pedro Lucas (pedrolucas.jsrn@gmail.com)
+ * @brief Implementation of the GameController class, which controls the Sudoku game.
+ * @version 1.0
+ * @date 2023-10-29
+ * 
+ * @copyright Copyright (c) 2023
+ * 
+ */
+
+
 #include "GameController.hpp"
 #include "Validate.hpp"
 #include "View.hpp"
