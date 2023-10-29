@@ -11,6 +11,14 @@ Pedro Lucas Medeiros do Nascimento [pedrolucas.jsrn@gmail.com]
 Lista aqui os problemas encontrados (se houve algum) e as
 possíveis limitações do programa.
 
+Considerando as exigências não existem limitações encontradas ou previstas. Mesmo assim, se destaca algumas coisas que poderiam ser implementadas a mais:
+- Aviso caso o jogador tente remover de uma posição que não possui números (fácil).
+- Otimizar o desenho da tabuleiro para trabalhar com outros tamanhos (16x16) (fácil).
+- Possibilidade de estabelecer uma quantidade máxima de erros que faria o jogador perder a partida (fácil).
+- Geração automática de tabuleiros novos (fácil).
+- Realizar um salvamento rápido de partidas que já foram salvas anteriormente (fácil).
+- Contagem de tempo para a realização total do jogo (fácil).
+
 # Grading
 
 Preencha os itens que você implementou, indicando qual a nota esperada para cada item.
