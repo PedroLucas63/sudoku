@@ -30,7 +30,7 @@
 int main(int argc, char *argv[]) {
    // Create a command-line argument parser
    ext::CLI cli;
-   cli.addArgumentOutFile('d', "data", {".bak"});
+   cli.addArgumentOutFile('d', "data", {".sdk"});
 
    // Parse command-line arguments
    cli.parse(argc, argv);

@@ -8,7 +8,6 @@
  * @copyright Copyright (c) 2023
  */
 
-
 #include "Sudoku.hpp"
 #include <algorithm>
 #include <fstream>
